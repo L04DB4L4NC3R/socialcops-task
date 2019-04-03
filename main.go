@@ -7,11 +7,13 @@ import (
 	"strings"
 
 	"github.com/angadsharma1016/socialcops/controller"
+	nats "github.com/nats-io/go-nats"
 )
 
 type server struct {
-	Host string
-	Port string
+	Host    string
+	Port    string
+	NatsCon *nats.EncodedConn
 }
 
 func (s *server) Init(addr string) {
@@ -21,12 +23,21 @@ func (s *server) Init(addr string) {
 	log.Println("Server ready at", addr)
 }
 
-func (s server) Serve(h *http.Handler) {
-	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), *h))
+func (s server) Serve() {
+	nc, _ := nats.Connect(nats.DefaultURL)
+	nec, err := nats.NewEncodedConn(nc, nats.JSON_ENCODER)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer nec.Close()
+	s.NatsCon = nec
+
+	handler := controller.Startup(nec)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), *handler))
 }
 
 func main() {
 	var s server
 	s.Init("0.0.0.0:3000")
-	s.Serve(controller.Startup())
+	s.Serve()
 }
