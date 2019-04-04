@@ -1,0 +1,50 @@
+{
+	"ImportPath": "github.com/angadsharma1016/socialcops",
+	"GoVersion": "go1.11",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.4.0-19-g1fbca2a",
+			"Rev": "1fbca2aabb09915d4f1006d01b271ad7778eec4f"
+		},
+		{
+			"ImportPath": "github.com/nats-io/go-nats",
+			"Comment": "v1.7.0-24-gefdce8e",
+			"Rev": "efdce8eefcb76a7d2209d3f135d43f3ccec89c7a"
+		},
+		{
+			"ImportPath": "github.com/nats-io/go-nats/encoders/builtin",
+			"Comment": "v1.7.0-24-gefdce8e",
+			"Rev": "efdce8eefcb76a7d2209d3f135d43f3ccec89c7a"
+		},
+		{
+			"ImportPath": "github.com/nats-io/go-nats/util",
+			"Comment": "v1.7.0-24-gefdce8e",
+			"Rev": "efdce8eefcb76a7d2209d3f135d43f3ccec89c7a"
+		},
+		{
+			"ImportPath": "github.com/nats-io/nkeys",
+			"Comment": "v0.0.2",
+			"Rev": "1546a3320a8f195a5b5c84aef8309377c2e411d5"
+		},
+		{
+			"ImportPath": "github.com/nats-io/nuid",
+			"Comment": "v1.0.0-8-g3024a71",
+			"Rev": "3024a71c3cbe30667286099921591e6fcc328230"
+		},
+		{
+			"ImportPath": "github.com/rs/cors",
+			"Comment": "v1.6.0-2-g76f58f3",
+			"Rev": "76f58f330d76a55c5badc74f6212e8a15e742c77"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/ed25519",
+			"Rev": "505ab145d0a99da450461ae2c1a9f6cd10d1f447"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/ed25519/internal/edwards25519",
+			"Rev": "505ab145d0a99da450461ae2c1a9f6cd10d1f447"
+		}
+	]
+}

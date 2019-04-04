@@ -15,4 +15,23 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
     ports:
     - 3306:3306
-    
+  socialcops-api:
+    build: .
+    container_name: socialcops-api
+    ports: 
+      - 3000:3000
+    volumes:
+      - .:/go/src/github.com/angadsharma1016/socialcops
+    depends_on:
+      - db
+    env_file: ./.env
+    restart: on-failure
+  nats:
+    container_name: nats
+    image: nats
+    ports:
+      - 4222:4222 # for clients
+      - 8222:8222 # HTTP management port for reporting
+      - 6222:6222 # routing port for clustering
+
+

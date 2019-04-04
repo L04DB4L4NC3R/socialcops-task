@@ -8,6 +8,7 @@ import (
 
 	"github.com/angadsharma1016/socialcops/controller"
 	"github.com/angadsharma1016/socialcops/model"
+	_ "github.com/go-sql-driver/mysql" // mysql driver
 	nats "github.com/nats-io/go-nats"
 )
 
@@ -25,7 +26,7 @@ func (s *server) Init(addr string) {
 }
 
 func (s server) RunProc() {
-	nc, _ := nats.Connect(nats.DefaultURL)
+	nc, _ := nats.Connect("nats:4222")
 	nec, err := nats.NewEncodedConn(nc, nats.JSON_ENCODER)
 	if err != nil {
 		log.Fatalln(err)
