@@ -7,16 +7,14 @@ import (
 	"github.com/rs/cors"
 )
 
-func Startup(conn *nats.EncodedConn) *http.Handler {
+func Startup(conn *nats.EncodedConn, sendc *chan Routine, recv *chan Routine) *http.Handler {
 	m := http.NewServeMux()
 
-	// test the server out
-	m.HandleFunc("/api/v1/test", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("API running"))
-	})
+	// test service
+	m.HandleFunc("/api/v1/test", testNATS(conn))
 
-	// test NATS
-	m.HandleFunc("/api/v1/nats", testNATS(conn))
+	m.HandleFunc("/api/v1/process", startTask(sendc, recv))
+	m.HandleFunc("/api/v1/process/kill", killTask(sendc))
 
 	// handle CORS
 	corsHandler := cors.Default().Handler(m)

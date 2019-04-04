@@ -11,19 +11,16 @@ import (
 	nats "github.com/nats-io/go-nats"
 )
 
-var count uint
-
-type Routine struct {
-	ID          uint
-	ShouldRun   bool
-	IsCompleted bool
-	Err         error
-}
-
 func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		count++
-		log.Println(count)
+
+		if r.URL.Query().Get("task") == "" {
+			w.Write([]byte("Usage: /api/v1/process?task=<taskName>"))
+			return
+		}
+
+		taskID++
+		log.Println(taskID)
 		sendc := make(chan Routine)
 		recv := make(chan Routine)
 
@@ -32,16 +29,16 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 		con.BindRecvQueueChan("foo", "queue", recv)
 
 		// send initiation message
-		sendc <- Routine{count, true, false, nil}
+		sendc <- Routine{taskID, true, false}
 
 		// used to cancel task
 		go func() {
 			time.Sleep(time.Second * 5)
-			sendc <- Routine{count, false, false, nil}
+			sendc <- Routine{taskID, false, false}
 		}()
 
 		// turn this into a goroutine, task to be cancelled
-		func(id uint) {
+		go func(id uint) {
 			var pid int
 			for {
 				msg := <-recv
@@ -56,7 +53,7 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 					if msg.ShouldRun {
 
 						// spawn long running task
-						cmd := exec.Command("./bin/task")
+						cmd := exec.Command("./bin/" + r.URL.Query().Get("task"))
 						cmd.Stdout = os.Stdout
 						cmd.Stderr = os.Stderr
 
@@ -74,7 +71,7 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 							if err != nil {
 								log.Println(err)
 							} else {
-								sendc <- Routine{id, false, true, nil}
+								sendc <- Routine{id, false, true}
 							}
 						}()
 						// ACK for completed JOB sendc <- Routine{id, false}
@@ -94,7 +91,7 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 
 			}
 
-		}(count)
+		}(taskID)
 
 	}
 }

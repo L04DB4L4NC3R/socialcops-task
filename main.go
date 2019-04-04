@@ -23,7 +23,7 @@ func (s *server) Init(addr string) {
 	log.Println("Server ready at", addr)
 }
 
-func (s server) Serve() {
+func (s server) RunProc() {
 	nc, _ := nats.Connect(nats.DefaultURL)
 	nec, err := nats.NewEncodedConn(nc, nats.JSON_ENCODER)
 	if err != nil {
@@ -32,12 +32,20 @@ func (s server) Serve() {
 	defer nec.Close()
 	s.NatsCon = nec
 
-	handler := controller.Startup(nec)
+	// make routine channels
+	sendc := make(chan controller.Routine)
+	recv := make(chan controller.Routine)
+
+	// bind channels to NATS events
+	nec.BindSendChan("process", sendc)
+	nec.BindRecvQueueChan("process", "queue", recv)
+
+	handler := controller.Startup(nec, &sendc, &recv)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), *handler))
 }
 
 func main() {
 	var s server
 	s.Init("0.0.0.0:3000")
-	s.Serve()
+	s.RunProc()
 }
