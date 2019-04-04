@@ -1,1 +1,4 @@
 test.csv
+.env
+.vscode
+db_data

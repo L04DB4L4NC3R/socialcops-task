@@ -4,9 +4,11 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/angadsharma1016/socialcops/model"
 )
 
-func killTask(sendc *chan Routine) http.HandlerFunc {
+func killTask(sendc *chan model.Routine) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var killID = r.URL.Query().Get("id")
@@ -23,7 +25,7 @@ func killTask(sendc *chan Routine) http.HandlerFunc {
 		}
 
 		// send activation signal
-		*sendc <- Routine{uint(id), false, false}
+		*sendc <- model.Routine{uint(id), false, false}
 
 		w.Write([]byte("Sent kill signal to task" + killID))
 

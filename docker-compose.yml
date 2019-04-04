@@ -1,0 +1,18 @@
+version: "3.1"
+services: 
+  db:
+    container_name: db
+    build: ./model/
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/mysql
+      # - ./database/setup.sql:/docker-entrypoint-initdb.d
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+    ports:
+    - 3306:3306
+    

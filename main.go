@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/angadsharma1016/socialcops/controller"
+	"github.com/angadsharma1016/socialcops/model"
 	nats "github.com/nats-io/go-nats"
 )
 
@@ -33,8 +34,8 @@ func (s server) RunProc() {
 	s.NatsCon = nec
 
 	// make routine channels
-	sendc := make(chan controller.Routine)
-	recv := make(chan controller.Routine)
+	sendc := make(chan model.Routine)
+	recv := make(chan model.Routine)
 
 	// bind channels to NATS events
 	nec.BindSendChan("process", sendc)
@@ -46,6 +47,8 @@ func (s server) RunProc() {
 
 func main() {
 	var s server
+	con := model.ConnectDB()
+	defer con.Close()
 	s.Init("0.0.0.0:3000")
 	s.RunProc()
 }

@@ -8,9 +8,11 @@ import (
 	"os/exec"
 	"syscall"
 	"time"
+
+	"github.com/angadsharma1016/socialcops/model"
 )
 
-func startTask(sendc *chan Routine, recv *chan Routine) http.HandlerFunc {
+func startTask(sendc *chan model.Routine, recv *chan model.Routine) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var taskName = r.URL.Query().Get("task")
@@ -25,7 +27,7 @@ func startTask(sendc *chan Routine, recv *chan Routine) http.HandlerFunc {
 		taskID++
 
 		// send activation signal
-		*sendc <- Routine{taskID, true, false}
+		*sendc <- model.Routine{taskID, true, false}
 
 		// run main process goroutine
 		go func(id uint) {
@@ -69,7 +71,7 @@ func startTask(sendc *chan Routine, recv *chan Routine) http.HandlerFunc {
 							} else {
 
 								// completion signal
-								*sendc <- Routine{id, false, true}
+								*sendc <- model.Routine{id, false, true}
 							}
 						}()
 
@@ -97,7 +99,7 @@ func startTask(sendc *chan Routine, recv *chan Routine) http.HandlerFunc {
 
 		}(taskID)
 
-		json.NewEncoder(w).Encode(RoutineInfo{
+		json.NewEncoder(w).Encode(model.RoutineInfo{
 			ID:          taskID,
 			IsCompleted: false,
 			Timestamp:   time.Now(),

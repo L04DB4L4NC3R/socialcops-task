@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/angadsharma1016/socialcops/model"
 	nats "github.com/nats-io/go-nats"
 )
 
@@ -21,20 +22,20 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 
 		taskID++
 		log.Println(taskID)
-		sendc := make(chan Routine)
-		recv := make(chan Routine)
+		sendc := make(chan model.Routine)
+		recv := make(chan model.Routine)
 
 		// bind channels to NATS events
 		con.BindSendChan("foo", sendc)
 		con.BindRecvQueueChan("foo", "queue", recv)
 
 		// send initiation message
-		sendc <- Routine{taskID, true, false}
+		sendc <- model.Routine{taskID, true, false}
 
 		// used to cancel task
 		go func() {
 			time.Sleep(time.Second * 5)
-			sendc <- Routine{taskID, false, false}
+			sendc <- model.Routine{taskID, false, false}
 		}()
 
 		// turn this into a goroutine, task to be cancelled
@@ -71,10 +72,10 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 							if err != nil {
 								log.Println(err)
 							} else {
-								sendc <- Routine{id, false, true}
+								sendc <- model.Routine{id, false, true}
 							}
 						}()
-						// ACK for completed JOB sendc <- Routine{id, false}
+						// ACK for completed JOB sendc <- model.Routine{id, false}
 
 					} else {
 						err := syscall.Kill(int(pid), syscall.SIGKILL)
