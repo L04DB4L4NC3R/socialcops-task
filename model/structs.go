@@ -24,10 +24,10 @@ func ConnectDB() *sql.DB {
 }
 
 type Routine struct {
-	ID             uint
-	ShouldRun      bool
-	IsCompleted    bool
-	WasInterrupted bool
+	ID             uint `json:"id"`
+	ShouldRun      bool `json:"shouldRun"`
+	IsCompleted    bool `json:"isCompleted"`
+	WasInterrupted bool `json:"wasInterrupted"`
 }
 
 type RoutineInfo struct {

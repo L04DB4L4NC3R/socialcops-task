@@ -33,16 +33,7 @@ func (s server) RunProc() {
 	}
 	defer nec.Close()
 	s.NatsCon = nec
-
-	// make routine channels
-	sendc := make(chan model.Routine)
-	recv := make(chan model.Routine)
-
-	// bind channels to NATS events
-	nec.BindSendChan("process", sendc)
-	nec.BindRecvQueueChan("process", "queue", recv)
-
-	handler := controller.Startup(nec, &sendc, &recv)
+	handler := controller.Startup(nec)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), *handler))
 }
 

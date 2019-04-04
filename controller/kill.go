@@ -7,9 +7,10 @@ import (
 	"strconv"
 
 	"github.com/angadsharma1016/socialcops/model"
+	nats "github.com/nats-io/go-nats"
 )
 
-func killTask(sendc *chan model.Routine) http.HandlerFunc {
+func killTask(conn *nats.EncodedConn) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var killID = r.URL.Query().Get("id")
@@ -39,8 +40,9 @@ func killTask(sendc *chan model.Routine) http.HandlerFunc {
 		// if task is killable, proceed to send interrupt
 		if killable {
 
-			// send activation signal
-			*sendc <- model.Routine{uint(id), false, false, true}
+			// send interrupt signal
+			log.Println("Publishing interrupt signal on task ", killID)
+			conn.Publish("interrupt", killID)
 
 			w.Write([]byte("Sent kill signal to task" + killID))
 			return

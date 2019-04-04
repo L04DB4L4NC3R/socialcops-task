@@ -3,20 +3,19 @@ package controller
 import (
 	"net/http"
 
-	"github.com/angadsharma1016/socialcops/model"
 	nats "github.com/nats-io/go-nats"
 	"github.com/rs/cors"
 )
 
 var taskID uint
 
-func Startup(conn *nats.EncodedConn, sendc *chan model.Routine, recv *chan model.Routine) *http.Handler {
+func Startup(conn *nats.EncodedConn) *http.Handler {
 	m := http.NewServeMux()
 
 	// test service
 	m.HandleFunc("/api/v1/test", testNATS(conn))
-	m.HandleFunc("/api/v1/process/start", startTask(sendc, recv))
-	m.HandleFunc("/api/v1/process/kill", killTask(sendc))
+	m.HandleFunc("/api/v1/process/start", startTask(conn))
+	m.HandleFunc("/api/v1/process/kill", killTask(conn))
 	m.HandleFunc("/api/v1/process/view", viewTasks())
 
 	// handle CORS
