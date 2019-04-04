@@ -30,12 +30,12 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 		con.BindRecvQueueChan("foo", "queue", recv)
 
 		// send initiation message
-		sendc <- model.Routine{taskID, true, false}
+		sendc <- model.Routine{taskID, true, false, false}
 
 		// used to cancel task
 		go func() {
 			time.Sleep(time.Second * 5)
-			sendc <- model.Routine{taskID, false, false}
+			sendc <- model.Routine{taskID, false, false, true}
 		}()
 
 		// turn this into a goroutine, task to be cancelled
@@ -72,7 +72,7 @@ func testNATS(con *nats.EncodedConn) http.HandlerFunc {
 							if err != nil {
 								log.Println(err)
 							} else {
-								sendc <- model.Routine{id, false, true}
+								sendc <- model.Routine{id, false, true, true}
 							}
 						}()
 						// ACK for completed JOB sendc <- model.Routine{id, false}

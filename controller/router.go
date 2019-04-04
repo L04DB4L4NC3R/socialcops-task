@@ -15,8 +15,9 @@ func Startup(conn *nats.EncodedConn, sendc *chan model.Routine, recv *chan model
 
 	// test service
 	m.HandleFunc("/api/v1/test", testNATS(conn))
-	m.HandleFunc("/api/v1/process", startTask(sendc, recv))
+	m.HandleFunc("/api/v1/process/start", startTask(sendc, recv))
 	m.HandleFunc("/api/v1/process/kill", killTask(sendc))
+	m.HandleFunc("/api/v1/process/view", viewTasks())
 
 	// handle CORS
 	corsHandler := cors.Default().Handler(m)

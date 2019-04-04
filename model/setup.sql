@@ -6,5 +6,6 @@ CREATE TABLE ROUTINES (
     id INT PRIMARY KEY,
     timestamp VARCHAR(100) NOT NULL,
     task_name VARCHAR(100) NOT NULL,
-    iscompleted BOOLEAN DEFAULT false
+    iscompleted BOOLEAN DEFAULT false,
+    wasinterrupted BOOLEAN DEFAULT false
 );

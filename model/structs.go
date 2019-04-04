@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 )
 
 var con *sql.DB
@@ -25,16 +24,18 @@ func ConnectDB() *sql.DB {
 }
 
 type Routine struct {
-	ID          uint
-	ShouldRun   bool
-	IsCompleted bool
+	ID             uint
+	ShouldRun      bool
+	IsCompleted    bool
+	WasInterrupted bool
 }
 
 type RoutineInfo struct {
-	ID          uint      `json:"taskID"`
-	Timestamp   time.Time `json:"timestamp"`
-	Task        string    `json:"taskName"`
-	IsCompleted bool      `json:"isCompleted"`
+	ID             uint   `json:"taskID"`
+	Timestamp      string `json:"timestamp"`
+	Task           string `json:"taskName"`
+	IsCompleted    bool   `json:"isCompleted"`
+	WasInterrupted bool   `json:"wasInterrupted"`
 }
 
 type RoutineInfoReturn struct {

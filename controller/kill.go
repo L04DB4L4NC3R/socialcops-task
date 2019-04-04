@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 	"strconv"
@@ -24,10 +25,29 @@ func killTask(sendc *chan model.Routine) http.HandlerFunc {
 			log.Println(err)
 		}
 
-		// send activation signal
-		*sendc <- model.Routine{uint(id), false, false}
+		// check if task if killable
+		killable, err := model.Killable(uint(id))
+		if err != nil && err != sql.ErrNoRows {
+			log.Println(err)
+			w.Write([]byte(err.Error()))
+			return
+		} else if err == sql.ErrNoRows {
+			w.Write([]byte("No such process found"))
+			return
+		}
 
-		w.Write([]byte("Sent kill signal to task" + killID))
+		// if task is killable, proceed to send interrupt
+		if killable {
+
+			// send activation signal
+			*sendc <- model.Routine{uint(id), false, false, true}
+
+			w.Write([]byte("Sent kill signal to task" + killID))
+			return
+
+		} else {
+			w.Write([]byte("The task has already been completed"))
+		}
 
 	}
 }
