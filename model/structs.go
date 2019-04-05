@@ -7,7 +7,10 @@ import (
 	"os"
 )
 
-var con *sql.DB
+var (
+	con *sql.DB
+	DB  **sql.DB
+)
 
 func ConnectDB() *sql.DB {
 	str := fmt.Sprintf("%s:%s@tcp(db:3306)/%s", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"), os.Getenv("MYSQL_DATABASE"))
@@ -20,6 +23,7 @@ func ConnectDB() *sql.DB {
 	}
 	log.Println("Connected to DB")
 	con = db
+	DB = &db
 	return con
 }
 

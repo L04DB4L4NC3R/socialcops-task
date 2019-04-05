@@ -18,14 +18,6 @@ import (
 func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var taskName = r.URL.Query().Get("task")
-
-		// select which task to run
-		if taskName == "" {
-			w.Write([]byte("Usage: /api/v1/process/start?task=<taskName>"))
-			return
-		}
-
 		// proc ID
 		taskID++
 
@@ -38,7 +30,7 @@ func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 			log.Println("staging long running process >>>>>>>>>>>>>>>>>>>>")
 
 			// spawn long running task
-			cmd := exec.Command("./bin/" + taskName)
+			cmd := exec.Command("./bin/main", "bigproc")
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 
@@ -106,7 +98,7 @@ func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 			ID:          taskID,
 			IsCompleted: false,
 			Timestamp:   time.Now().String(),
-			Task:        taskName,
+			Task:        "bigproc",
 		}
 		if err := rt.Save(); err != nil {
 			log.Println(err)

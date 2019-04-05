@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo long running task
-sleep 10
-echo task done
