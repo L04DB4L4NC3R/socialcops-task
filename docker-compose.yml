@@ -21,7 +21,7 @@ services:
     ports: 
       - 3000:3000
     volumes:
-      - .:/go/src/github.com/angadsharma1016/socialcops
+      - .:/go/src/github.com/angadsharma1016/socialcops-task
     depends_on:
       - db
     env_file: ./.env
