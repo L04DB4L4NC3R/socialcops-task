@@ -17,6 +17,12 @@ func Startup(conn *nats.EncodedConn) *http.Handler {
 	m.HandleFunc("/api/v1/process/start", startTask(conn))
 	m.HandleFunc("/api/v1/process/kill", killTask(conn))
 	m.HandleFunc("/api/v1/process/view", viewTasks())
+	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./views/index.html")
+	})
+	m.Handle("/js/", http.FileServer(http.Dir("views")))
+	m.Handle("/css/", http.FileServer(http.Dir("views")))
+	m.Handle("/img/", http.FileServer(http.Dir("views")))
 
 	// handle CORS
 	corsHandler := cors.Default().Handler(m)
