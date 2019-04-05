@@ -10,6 +10,21 @@ import (
 	nats "github.com/nats-io/go-nats"
 )
 
+/**
+* @api {get} /api/v1/process/kill kill the long running task
+* @apiName kill the long running task
+* @apiGroup all
+@apiParam {uint} id id to kill the task by
+*
+*@apiParamExample {string} request-example
+*
+*curl http://<domain:port>/api/v1/process/kill?id=1
+*
+*@apiParamExample {string} response-example
+*
+*Sent kill signal to task 1
+*
+*/
 func killTask(conn *nats.EncodedConn) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

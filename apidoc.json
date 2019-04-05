@@ -1,0 +1,12 @@
+
+{
+    "name": "Socialcops task documentation",
+    "version": "0.1.0",
+    "description": "For the social cops",
+    "title": "docs",
+    "url":"http://<domain:port>",
+    "template": {
+        "withCompare": true,
+        "withGenerator": true
+    }
+  }

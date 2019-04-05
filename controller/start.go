@@ -15,6 +15,26 @@ import (
 	nats "github.com/nats-io/go-nats"
 )
 
+/**
+* @api {get} /api/v1/process/start start the long running task
+* @apiName start the long running task
+* @apiGroup all
+*
+*@apiParamExample {string} request-example
+*
+*curl http://<domain:port>/api/v1/process/start
+*
+*@apiParamExample {json} response-example
+*
+*{
+*	"taskID": 1,
+*	"timestamp": "string Unix timestamp",
+*	"taskName": "bigproc",
+*	"isCompleted":false,
+*	"wasInterrupted": false
+*}
+*
+ */
 func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
