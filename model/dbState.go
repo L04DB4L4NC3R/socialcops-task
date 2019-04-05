@@ -2,7 +2,7 @@ package model
 
 import "log"
 
-func CommitDB() {
+func Commit() {
 	res, err := con.Exec("COMMIT")
 	if err != nil {
 		log.Println("ERROR committing")
@@ -11,7 +11,7 @@ func CommitDB() {
 	log.Println(res.RowsAffected())
 }
 
-func RollbackDB() {
+func Rollback() {
 	res, err := con.Exec("ROLLBACK")
 	if err != nil {
 		log.Println("ERROR rolling back")

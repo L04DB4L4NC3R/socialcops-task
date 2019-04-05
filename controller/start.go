@@ -30,7 +30,7 @@ func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 			log.Println("staging long running process >>>>>>>>>>>>>>>>>>>>")
 
 			// spawn long running task
-			cmd := exec.Command("./bin/main", "bigproc")
+			cmd := exec.Command("./bin/main", "bigproc", string(taskID))
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 
@@ -52,9 +52,8 @@ func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 					w.Write([]byte("Completed task" + string(id)))
 					// completion signal
 					go model.CompleteRoutine(id)
-
-					// commit DB
-					go model.CommitDB()
+					// commit
+					go model.Commit()
 				}
 			}()
 			/* End long running task */
@@ -83,9 +82,8 @@ func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 					log.Println("Killing task with task ID:", id)
 					// update the task as interrupted
 					go model.InterruptRoutine(id)
-
-					// rollback changes
-					go model.RollbackDB()
+					// rollback
+					go model.Rollback()
 
 					return
 

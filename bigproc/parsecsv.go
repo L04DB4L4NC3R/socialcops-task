@@ -38,6 +38,7 @@ type Data struct {
 }
 
 func Do(con *sql.DB) {
+	var dataArr []Data
 	csvFile, err := os.Open("./test.csv")
 	if err != nil {
 		log.Println(err)
@@ -51,7 +52,7 @@ func Do(con *sql.DB) {
 		} else if error != nil {
 			log.Fatal(error)
 		}
-		data := Data{
+		dataArr = append(dataArr, Data{
 			Field1:  line[0][:20],
 			Field2:  line[1],
 			Field3:  line[2],
@@ -77,8 +78,8 @@ func Do(con *sql.DB) {
 			Field23: line[22],
 			Field24: line[23],
 			Field25: line[24],
-		}
-		savetoSQL(con, data)
+		})
 	}
 
+	savetoSQL(con, dataArr)
 }
