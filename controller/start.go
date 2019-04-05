@@ -51,7 +51,10 @@ func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 				} else {
 					w.Write([]byte("Completed task" + string(id)))
 					// completion signal
-					//*sendc <- model.Routine{id, false, true, false}
+					go model.CompleteRoutine(id)
+
+					// commit DB
+					go model.CommitDB()
 				}
 			}()
 			/* End long running task */
@@ -80,6 +83,10 @@ func startTask(conn *nats.EncodedConn) http.HandlerFunc {
 					log.Println("Killing task with task ID:", id)
 					// update the task as interrupted
 					go model.InterruptRoutine(id)
+
+					// rollback changes
+					go model.RollbackDB()
+
 					return
 
 				} else {

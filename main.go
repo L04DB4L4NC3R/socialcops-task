@@ -40,13 +40,13 @@ func (s server) RunProc() {
 }
 
 func main() {
-	con := model.ConnectDB()
-	defer con.Close()
+	db := model.ConnectDB()
+	defer db.Close()
 
 	// if flagged to bigproc, execute accordingly else run normally
 	if len(os.Args) > 1 {
 		if os.Args[1] == "bigproc" {
-			bigproc.Do(con)
+			bigproc.Do(db)
 		} else {
 			fmt.Println("usage: ./bin/main OR ./bin/main bigproc")
 		}
