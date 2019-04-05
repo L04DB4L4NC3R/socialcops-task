@@ -69,3 +69,14 @@ After running the commands below, wait for DB to build, then goto localhost:3000
 $ docker-compose build
 $ docker-compose up -d
 ```
+
+<br/>
+
+#### Secrets
+
+| Name | Description |
+|:----:|:-----------:|
+| MYSQL_ROOT_PASSWORD | MySQL root password
+| MYSQL_USER | mysql user |
+| MYSQL_PASSWORD | mysql password |
+| MYSQL_DATABASE | database to use in MySQL |
