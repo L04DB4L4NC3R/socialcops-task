@@ -6,7 +6,7 @@ An efficient task runner and manipulator for SocialCops
 [![](https://img.shields.io/badge/docs%20-view%20API%20documentation-orange.svg?style=for-the-badge&logo=appveyor)](https://angadsharma1016.github.io/sc-task/)
 
 
-[![demo](https://img.shields.io/badge/view%20demo-youtube-orange.svg?style=for-the-badge&logo=appveyor)]()
+[![demo](https://img.shields.io/badge/view%20demo-youtube-orange.svg?style=for-the-badge&logo=appveyor)](https://www.youtube.com/watch?v=Ldza4HUNZqg&feature=youtu.be)
 
 <br/>
 <br/>
@@ -58,3 +58,14 @@ An efficient task runner and manipulator for SocialCops
 <br/>
 
 ![process lifecycle](./views/img/lifecycle.png)
+
+
+<br/>
+
+#### How to run
+After running the commands below, wait for DB to build, then goto localhost:3000
+
+```
+$ docker-compose build
+$ docker-compose up -d
+```
